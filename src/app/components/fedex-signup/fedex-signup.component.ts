@@ -7,7 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./fedex-signup.component.scss']
 })
 export class FedexSignupComponent implements OnInit, OnDestroy {
- signupForm: FormGroup;
+  signupForm: FormGroup;
 
   constructor(private fb: FormBuilder) { 
      this.signupForm = new FormGroup({});

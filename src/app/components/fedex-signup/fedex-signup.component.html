@@ -2,28 +2,28 @@
   <form [formGroup]="signupForm" (ngSubmit)="signup()" class="fedex-signup__form">
     <mat-form-field appearance="fill">
         <mat-label>First Name</mat-label>
-        <input matInput name="firstName" placeholder="First name" formControlName="firstName" required>
-        <!-- <mat-error *ngIf="signupFormControls.firstName.errors?.required">First name is required</mat-error> -->
+        <input matInput name="firstName" placeholder="First Name" formControlName="firstName" required>
+        <mat-error *ngIf="signupFormControls['firstName'].errors?.['required']">First name is required</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label>Last Name</mat-label>
-        <input matInput name="lastName" placeholder="Last name" formControlName="lastName" required>
-        <!-- <mat-error *ngIf="signupFormControls.lastName.errors?.required">Last name is required</mat-error> -->
+        <input matInput name="lastName" placeholder="Last Name" formControlName="lastName" required>
+        <mat-error *ngIf="signupFormControls['lastName'].errors?.['required']">Last name is required</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label>Email</mat-label>
         <input matInput name="email" placeholder="Email" formControlName="email" required>
-        <!-- <mat-error *ngIf="signupFormControls.email.errors?.required">Email is required</mat-error> -->
+        <mat-error *ngIf="signupFormControls['email'].errors?.['required']">Email is required</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
         <input matInput name="password" placeholder="Password" formControlName="password" required>
-        <!-- <mat-error *ngIf="signupFormControls.password.errors?.required">Password is required</mat-error> -->
+        <mat-error *ngIf="signupFormControls['password'].errors?.['required']">Password is required</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label>Confirm Password</mat-label>
         <input matInput name="confirmPassword" placeholder="Confirm Password" formControlName="confirmPassword" required>
-        <!-- <mat-error *ngIf="signupFormControls.confirmPassword.errors?.required">Password is required</mat-error> -->
+        <mat-error *ngIf="signupFormControls['confirmPassword'].errors?.['required']">Confirm Password is required</mat-error>
         <!-- <mat-error *ngIf="seachFormControls.query.errors?.passwordsShouldMatch">Passwords should match</mat-error> -->
     </mat-form-field>
     <div>
