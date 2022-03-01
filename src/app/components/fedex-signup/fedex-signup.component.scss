@@ -1,0 +1,13 @@
+.fedex-signup-container {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .mat-form-field {
+    width: 70%;
+  }
+  button {
+    margin-left: 10px;
+  }
+}
