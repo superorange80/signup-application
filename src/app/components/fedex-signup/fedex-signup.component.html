@@ -1,34 +1,95 @@
 <div class="fedex-signup-container">
-  <form [formGroup]="signupForm" (ngSubmit)="signup()" class="fedex-signup__form">
+  <div *ngIf="loading">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <div *ngIf="!loading && submitSuccessful">
+    <P>{{ successMessage }}</P>
+  </div>
+  <form
+    [formGroup]="signupForm"
+    (ngSubmit)="signup()"
+    class="fedex-signup__form"
+  >
     <mat-form-field appearance="fill">
-        <mat-label>First Name</mat-label>
-        <input matInput name="firstName" placeholder="First Name" formControlName="firstName" required>
-        <mat-error *ngIf="signupFormControls['firstName'].errors?.['required']">First name is required</mat-error>
+      <mat-label>First Name</mat-label>
+      <input
+        matInput
+        name="firstName"
+        placeholder="First Name"
+        formControlName="firstName"
+        required
+      />
+      <mat-error *ngIf="signupForm.controls['firstName'].errors?.['required']"
+        >First name is required</mat-error
+      >
     </mat-form-field>
     <mat-form-field appearance="fill">
-        <mat-label>Last Name</mat-label>
-        <input matInput name="lastName" placeholder="Last Name" formControlName="lastName" required>
-        <mat-error *ngIf="signupFormControls['lastName'].errors?.['required']">Last name is required</mat-error>
+      <mat-label>Last Name</mat-label>
+      <input
+        matInput
+        name="lastName"
+        placeholder="Last Name"
+        formControlName="lastName"
+        required
+      />
+      <mat-error *ngIf="signupForm.controls['lastName'].errors?.['required']"
+        >Last name is required</mat-error
+      >
     </mat-form-field>
     <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput name="email" placeholder="Email" formControlName="email" required>
-        <mat-error *ngIf="signupFormControls['email'].errors?.['required']">Email is required</mat-error>
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        name="email"
+        placeholder="Email"
+        formControlName="email"
+        required
+      />
+      <mat-error *ngIf="signupForm.controls['email'].errors?.['required']"
+        >Email is required</mat-error
+      >
+      <mat-error *ngIf="signupForm.controls['email'].errors?.['email']"
+        >Email is invalid</mat-error
+      >
     </mat-form-field>
     <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
-        <input matInput name="password" placeholder="Password" formControlName="password" required>
-        <mat-error *ngIf="signupFormControls['password'].errors?.['required']">Password is required</mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-        <mat-label>Confirm Password</mat-label>
-        <input matInput name="confirmPassword" placeholder="Confirm Password" formControlName="confirmPassword" required>
-        <mat-error *ngIf="signupFormControls['confirmPassword'].errors?.['required']">Confirm Password is required</mat-error>
-        <!-- <mat-error *ngIf="seachFormControls.query.errors?.passwordsShouldMatch">Passwords should match</mat-error> -->
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="password"
+        name="password"
+        placeholder="Password"
+        formControlName="password"
+        required
+        minlength="8"
+      />
+      <mat-error *ngIf="signupForm.controls['password'].errors?.['required']"
+        >Password is required</mat-error
+      >
+      <mat-error
+        *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['minlength']"
+        >Password should be minimum 8 characters</mat-error
+      >
+      <mat-error
+        *ngIf="!signupForm.controls['password'].errors?.['required'] && !signupForm.controls['password'].errors?.['minlength'] 
+        && signupForm.controls['password'].errors?.['lowerCaseUpperCaseLetters']"
+        >Password should contain lower case and upper case letters</mat-error
+      >
+      <mat-error
+        *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['invalidPassword']"
+        >Password should not contain first name or last name</mat-error
+      >
     </mat-form-field>
     <div>
-      <button mat-raised-button color="primary" type="submit">Sign up</button>
+      <button
+        [disabled]="loading"
+        mat-raised-button
+        color="primary"
+        type="submit"
+      >
+        Sign up
+      </button>
     </div>
   </form>
-
 </div>
