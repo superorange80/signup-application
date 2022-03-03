@@ -17,7 +17,6 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
   loading = false;
   submitSuccessful = false;
   successMessage = 'Signup is successfull';
-  showPassword = false;
 
   // @ViewChild('form') form: any;
   private destroy$: Subject<boolean> = new Subject<boolean>();
@@ -36,10 +35,6 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
       },
       { validators: passwordValidator() }
     );
-  }
-
-  togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
   }
 
   signup(): void {
