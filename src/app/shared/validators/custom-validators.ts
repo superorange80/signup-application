@@ -7,20 +7,20 @@ import {
 
 export function passwordValidator() {
   return (form: FormGroup): ValidationErrors | null => {
-    const firstName = form.get('firstName')?.value;
-    const lastName = form.get('lastName')?.value;
-    const password = form.get('password')?.value;
+    const firstName = form.get('firstName')?.value?.toLowerCase();
+    const lastName = form.get('lastName')?.value?.toLowerCase();
+    const password = form.get('password')?.value?.toLowerCase();
 
     const isInvalidPassword =
-      (firstName !== '' && password.includes(firstName)) ||
-      (lastName !== '' && password.includes(lastName));
+      (firstName !== '' && password?.includes(firstName)) ||
+      (lastName !== '' && password?.includes(lastName));
 
     if (isInvalidPassword) {
       form.get('password')?.setErrors({ invalidPassword: { value: password } });
       return { invalidPassword: { value: password } };
-    } else {
-      return null;
     }
+
+    return null;
   };
 }
 
