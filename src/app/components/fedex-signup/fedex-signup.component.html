@@ -79,7 +79,7 @@
       >
       <mat-error
         *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['invalidPassword']"
-        >Password should not contain first name or last name</mat-error
+        id="passwordWithFirstOrLastName">Password should not contain first name or last name</mat-error
       >
     </mat-form-field>
     <div>
