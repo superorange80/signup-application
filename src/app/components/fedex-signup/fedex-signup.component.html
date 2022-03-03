@@ -50,31 +50,32 @@
         >Email is required</mat-error
       >
       <mat-error *ngIf="signupForm.controls['email'].errors?.['email']"
-        >Email is invalid</mat-error
+        id="emailInvalidError">Email is invalid</mat-error
       >
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Password</mat-label>
       <input
         matInput
-        type="password"
+        [type]="showPassword ? 'text' : 'password'"
         name="password"
         placeholder="Password"
         formControlName="password"
         required
         minlength="8"
       />
+      <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon>
       <mat-error *ngIf="signupForm.controls['password'].errors?.['required']"
         >Password is required</mat-error
       >
       <mat-error
         *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['minlength']"
-        >Password should be minimum 8 characters</mat-error
+        id="passwordLessThanMinimumLetters">Password should be minimum 8 characters</mat-error
       >
       <mat-error
         *ngIf="!signupForm.controls['password'].errors?.['required'] && !signupForm.controls['password'].errors?.['minlength'] 
         && signupForm.controls['password'].errors?.['lowerCaseUpperCaseLetters']"
-        >Password should contain lower case and upper case letters</mat-error
+        id="passwordWithLowerCaseUppercase">Password should contain lower case and upper case letters</mat-error
       >
       <mat-error
         *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['invalidPassword']"
