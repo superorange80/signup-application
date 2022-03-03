@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { SignupService } from '@fedex/shared/services/signup.service';
@@ -14,12 +14,13 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./fedex-signup.component.scss'],
 })
 export class FedexSignupComponent implements OnInit, OnDestroy {
+  title = 'Fedex.com Signup';
   signupForm: FormGroup;
   loading = false;
   feedbackMessage = '';
   showPassword = false;
 
-  // @ViewChild('form') form: any;
+  @ViewChild('form') form:any;
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private fb: FormBuilder, private signUpService: SignupService) {
@@ -49,7 +50,6 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
     if (this.signupForm.valid) {
       this.loading = true;
 
-      // TODO: update response type
       this.signUpService
         .signUp(this.signupForm.value)
         .pipe(
@@ -57,10 +57,9 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
           finalize(() => (this.loading = false))
         )
         .subscribe({
-          next: (signedUserResource: any) => {
+          next: (_signedUserResource: any) => {
             this.feedbackMessage = 'Signup is successfull';
-            // TODO: do not show displaying validation messages on reset
-            // this.signupForm.reset();
+            this.form.resetForm();
           },
           error: (errorResponse: HttpErrorResponse) => {
             this.loading = false;

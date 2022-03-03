@@ -1,17 +1,20 @@
 .fedex-signup {
   &__container {
-    &__form {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+    h1 {
+      color: #673ab7;
     }
+  }
+  &__feedback {
+    color: #de002e;
+    font-weight: bold;
+  }
+  &__form {
     .mat-form-field {
       display: block;
-      // width: 70%;
       padding-bottom: 10px;
     }
     button {
-      margin-left: 10px;
+      margin-top: 10px;
     }
   }
 }

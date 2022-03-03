@@ -64,6 +64,13 @@ describe('FedexSignupComponent', () => {
     fixture.destroy();
   });
 
+  it('should have title "Fedex.com Signup"', () => {
+    const titleElement: HTMLElement = fixture.debugElement.query(
+      By.css('.fedex-signup__container h1')
+    ).nativeElement;
+    expect(titleElement.innerText).toEqual('Fedex.com Signup');
+  });
+
   it('should render all form elements', () => {
     expect(inputElements.length).toEqual(4);
   });
@@ -134,7 +141,7 @@ describe('FedexSignupComponent', () => {
       ).nativeElement;
       expect(matErrorEl).toBeTruthy();
       expect(matErrorEl.innerText).toBe(
-        'Password should be minimum 8 characters'
+        'Password must be minimum 8 characters'
       );
     });
 
@@ -171,7 +178,7 @@ describe('FedexSignupComponent', () => {
       ).nativeElement;
       expect(matErrorEl).toBeTruthy();
       expect(matErrorEl.innerText).toBe(
-        'Password should contain lower case and upper case letters'
+        'Password must contain at least 1 upper case letter, 1 lower case letter. Ex: HelloWorld'
       );
     });
 
@@ -212,7 +219,7 @@ describe('FedexSignupComponent', () => {
       ).nativeElement;
       expect(matErrorEl).toBeTruthy();
       expect(matErrorEl.innerText).toBe(
-        'Password should not contain first name or last name'
+        'Password must not contain first name or last name'
       );
     });
 
@@ -252,14 +259,14 @@ describe('FedexSignupComponent', () => {
       });
     });
 
-    it('should check that form is valid when all validations are fulfilled', () => {
+    it("should reset form when all validations are fulfilled and form is submitted successfully", () => {
       signUpFormSubmitSpy = spyOn(signupService, 'signUp').and.returnValue(
         of(responseMock)
       );
       signUpFormElement.triggerEventHandler('submit', null);
       fixture.detectChanges();
       const isSignupFormValid = component.signupForm.valid;
-      expect(isSignupFormValid).toBeTruthy();
+      expect(isSignupFormValid).toBeFalsy();
     });
 
     it('should submit succesfully when form data is valid', async () => {
@@ -270,11 +277,9 @@ describe('FedexSignupComponent', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      const isSignupFormValid = component.signupForm.valid;
       const feedbackMessageElement = fixture.debugElement.query(
-        By.css('.fedex-signup__feedback > p')
+        By.css('.fedex-signup__feedback')
       );
-      expect(isSignupFormValid).toBeTruthy();
       expect(signUpFormSubmitSpy).toHaveBeenCalledOnceWith(formGroupValue);
 
       expect(feedbackMessageElement.nativeElement.innerText).toEqual(
@@ -282,9 +287,12 @@ describe('FedexSignupComponent', () => {
       );
     });
 
-    it('should submit succesfully when form data is valid', async () => {
+    it('should show custom error message when error returned by the service', async () => {
       const errorResponse = new HttpErrorResponse({
-        error: { code: 'some code', message: 'Something bad happened. please try again later.' },
+        error: {
+          code: 'some code',
+          message: 'Something bad happened. please try again later.',
+        },
         status: 400,
         statusText: 'Bad Request',
       });
@@ -297,11 +305,9 @@ describe('FedexSignupComponent', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      const isSignupFormValid = component.signupForm.valid;
       const feedbackMessageElement = fixture.debugElement.query(
-        By.css('.fedex-signup__feedback > p')
+        By.css('.fedex-signup__feedback')
       );
-      expect(isSignupFormValid).toBeTruthy();
       expect(signUpFormSubmitSpy).toHaveBeenCalledOnceWith(formGroupValue);
 
       expect(feedbackMessageElement.nativeElement.innerText).toEqual(

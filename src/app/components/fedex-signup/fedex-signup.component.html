@@ -2,10 +2,14 @@
   <div *ngIf="loading">
     <mat-spinner [diameter]="50"></mat-spinner>
   </div>
-  <div *ngIf="!loading && feedbackMessage.length" class="fedex-signup__feedback">
-    <p>{{ feedbackMessage }}</p>
-  </div>
+  <h3 *ngIf="!loading && feedbackMessage.length" class="fedex-signup__feedback">
+    {{ feedbackMessage }}
+  </h3>
+
+  <h1>{{ title }}</h1>
+
   <form
+    #form="ngForm"
     [formGroup]="signupForm"
     (ngSubmit)="signup()"
     class="fedex-signup__form"
@@ -49,8 +53,10 @@
       <mat-error *ngIf="signupForm.controls['email'].errors?.['required']"
         >Email is required</mat-error
       >
-      <mat-error *ngIf="signupForm.controls['email'].errors?.['email']"
-        id="emailInvalidError">Email is invalid</mat-error
+      <mat-error
+        *ngIf="signupForm.controls['email'].errors?.['email']"
+        id="emailInvalidError"
+        >Email is invalid</mat-error
       >
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -64,22 +70,28 @@
         required
         minlength="8"
       />
-      <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon>
+      <mat-icon matSuffix (click)="togglePasswordVisibility()"
+        >visibility</mat-icon
+      >
       <mat-error *ngIf="signupForm.controls['password'].errors?.['required']"
         >Password is required</mat-error
       >
       <mat-error
         *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['minlength']"
-        id="passwordLessThanMinimumLetters">Password should be minimum 8 characters</mat-error
+        id="passwordLessThanMinimumLetters"
+        >Password must be minimum 8 characters</mat-error
       >
       <mat-error
         *ngIf="!signupForm.controls['password'].errors?.['required'] && !signupForm.controls['password'].errors?.['minlength'] 
         && signupForm.controls['password'].errors?.['lowerCaseUpperCaseLetters']"
-        id="passwordWithLowerCaseUppercase">Password should contain lower case and upper case letters</mat-error
+        id="passwordWithLowerCaseUppercase"
+        >Password must contain at least 1 upper case letter, 1 lower case
+        letter. Ex: HelloWorld</mat-error
       >
       <mat-error
         *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['invalidPassword']"
-        id="passwordWithFirstOrLastName">Password should not contain first name or last name</mat-error
+        id="passwordWithFirstOrLastName"
+        >Password must not contain first name or last name</mat-error
       >
     </mat-form-field>
     <div>
