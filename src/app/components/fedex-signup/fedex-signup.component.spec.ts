@@ -11,6 +11,9 @@ import { FedexSignupComponent } from './fedex-signup.component';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { SignupService } from '@fedex/shared/services/signup.service';
+import { SignedupUserResponse } from '@fedex/shared/models/signed-up-user-response';
+import { of, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('FedexSignupComponent', () => {
   let component: FedexSignupComponent;
@@ -26,6 +29,15 @@ describe('FedexSignupComponent', () => {
     email: 'john.lennon@test.com',
     password: 'helloWorld2!@3',
   };
+
+  const responseMock: Array<SignedupUserResponse> = [
+    {
+      _id: '2ec1d5a7-2836-4c87-9228-88e2b29ad4d1',
+      email: 'john.lennon@test.com',
+      firstName: 'John',
+      lastName: 'Lennon',
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -43,7 +55,7 @@ describe('FedexSignupComponent', () => {
     fixture.detectChanges();
 
     signUpFormElement = fixture.debugElement.query(
-      By.css('.fedex-signup-container form')
+      By.css('.fedex-signup__container form')
     );
     inputElements = signUpFormElement.queryAll(By.css('input'));
   });
@@ -66,6 +78,22 @@ describe('FedexSignupComponent', () => {
     };
 
     expect(signUpForm.value).toEqual(signupFormValues);
+  });
+
+  it('should check "required" validations for form elements', async () => {
+    signUpForm = component.signupForm;
+    signUpFormElement.triggerEventHandler('submit', null);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    inputElements.forEach((inputElement: DebugElement) => {
+      let formControlName = inputElement.attributes[
+        'formControlName'
+      ] as string;
+      let formControl = signUpForm?.get(formControlName);
+
+      expect(formControl?.errors).not.toBeNull();
+    });
   });
 
   it('should check if email is invalid', async () => {
@@ -213,8 +241,6 @@ describe('FedexSignupComponent', () => {
     let signUpFormSubmitSpy: jasmine.Spy;
 
     beforeEach(() => {
-      signUpFormSubmitSpy = spyOn(signupService, 'signUp').and.callThrough();
-
       inputElements = signUpFormElement.queryAll(By.css('input'));
       inputElements[0].nativeElement.value = formGroupValue.firstName;
       inputElements[1].nativeElement.value = formGroupValue.lastName;
@@ -224,20 +250,94 @@ describe('FedexSignupComponent', () => {
       inputElements.forEach((inputElement: DebugElement) => {
         inputElement.nativeElement.dispatchEvent(new Event('input'));
       });
+    });
+
+    it('should check that form is valid when all validations are fulfilled', () => {
+      signUpFormSubmitSpy = spyOn(signupService, 'signUp').and.returnValue(
+        of(responseMock)
+      );
+      signUpFormElement.triggerEventHandler('submit', null);
+      fixture.detectChanges();
+      const isSignupFormValid = component.signupForm.valid;
+      expect(isSignupFormValid).toBeTruthy();
+    });
+
+    it('should submit succesfully when form data is valid', async () => {
+      signUpFormSubmitSpy = spyOn(signupService, 'signUp').and.returnValue(
+        of(responseMock)
+      );
+      signUpFormElement.triggerEventHandler('submit', null);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const isSignupFormValid = component.signupForm.valid;
+      const feedbackMessageElement = fixture.debugElement.query(
+        By.css('.fedex-signup__feedback > p')
+      );
+      expect(isSignupFormValid).toBeTruthy();
+      expect(signUpFormSubmitSpy).toHaveBeenCalledOnceWith(formGroupValue);
+
+      expect(feedbackMessageElement.nativeElement.innerText).toEqual(
+        'Signup is successfull'
+      );
+    });
+
+    it('should submit succesfully when form data is valid', async () => {
+      const errorResponse = new HttpErrorResponse({
+        error: { code: 'some code', message: 'Something bad happened. please try again later.' },
+        status: 400,
+        statusText: 'Bad Request',
+      });
+
+      signUpFormSubmitSpy = spyOn(signupService, 'signUp').and.returnValue(
+        throwError(() => errorResponse)
+      );
 
       signUpFormElement.triggerEventHandler('submit', null);
       fixture.detectChanges();
-    });
+      await fixture.whenStable();
 
-    it('should check if form is valid when all validations are fulfilled', () => {
       const isSignupFormValid = component.signupForm.valid;
-      expect(isSignupFormValid).toBeTruthy();
-    });
-
-    it('should submit succesfully when form data is valid', () => {
-      const isSignupFormValid = component.signupForm.valid;
+      const feedbackMessageElement = fixture.debugElement.query(
+        By.css('.fedex-signup__feedback > p')
+      );
       expect(isSignupFormValid).toBeTruthy();
       expect(signUpFormSubmitSpy).toHaveBeenCalledOnceWith(formGroupValue);
+
+      expect(feedbackMessageElement.nativeElement.innerText).toEqual(
+        'Something bad happened. please try again later.'
+      );
+    });
+
+    it('should check that button is disabled when "loading" is true', async () => {
+      signUpFormSubmitSpy = spyOn(signupService, 'signUp').and.returnValue(
+        of(responseMock)
+      );
+      signUpFormElement.triggerEventHandler('submit', null);
+      component.loading = true;
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(
+        fixture.debugElement.nativeElement
+          .querySelector('button')
+          .getAttribute('disabled')
+      ).toBeDefined();
+    });
+    it('should check that button is not disabled when "loading" is false', async () => {
+      signUpFormSubmitSpy = spyOn(signupService, 'signUp').and.returnValue(
+        of(responseMock)
+      );
+      signUpFormElement.triggerEventHandler('submit', null);
+      component.loading = false;
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(
+        fixture.debugElement.nativeElement
+          .querySelector('button')
+          .getAttribute('disabled')
+      ).toBeNull();
     });
   });
 });

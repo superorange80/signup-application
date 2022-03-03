@@ -6,6 +6,7 @@ import {
   lowerCaseUpperCaseValidator,
   passwordValidator,
 } from '@fedex/shared/validators/custom-validators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'fedex-signup',
@@ -15,8 +16,7 @@ import {
 export class FedexSignupComponent implements OnInit, OnDestroy {
   signupForm: FormGroup;
   loading = false;
-  submitSuccessful = false;
-  successMessage = 'Signup is successfull';
+  feedbackMessage = '';
   showPassword = false;
 
   // @ViewChild('form') form: any;
@@ -58,14 +58,13 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: (signedUserResource: any) => {
-            this.submitSuccessful = true;
-            // this.form.resetForm();
+            this.feedbackMessage = 'Signup is successfull';
             // TODO: do not show displaying validation messages on reset
-            this.signupForm.reset();
+            // this.signupForm.reset();
           },
-          error: (error) => {
+          error: (errorResponse: HttpErrorResponse) => {
             this.loading = false;
-            console.log('error::', error);
+            this.feedbackMessage = errorResponse.error.message;
           },
         });
     }

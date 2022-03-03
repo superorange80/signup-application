@@ -1,13 +1,17 @@
-.fedex-signup-container {
-  &__form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .mat-form-field {
-    width: 70%;
-  }
-  button {
-    margin-left: 10px;
+.fedex-signup {
+  &__container {
+    &__form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .mat-form-field {
+      display: block;
+      // width: 70%;
+      padding-bottom: 10px;
+    }
+    button {
+      margin-left: 10px;
+    }
   }
 }

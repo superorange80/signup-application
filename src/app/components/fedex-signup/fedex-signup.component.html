@@ -1,9 +1,9 @@
-<div class="fedex-signup-container">
+<div class="fedex-signup__container">
   <div *ngIf="loading">
     <mat-spinner [diameter]="50"></mat-spinner>
   </div>
-  <div *ngIf="!loading && submitSuccessful">
-    <P>{{ successMessage }}</P>
+  <div *ngIf="!loading && feedbackMessage.length" class="fedex-signup__feedback">
+    <p>{{ feedbackMessage }}</p>
   </div>
   <form
     [formGroup]="signupForm"
