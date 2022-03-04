@@ -2,11 +2,13 @@
   &__container {
     h1 {
       color: #673ab7;
+      text-align: center;
     }
   }
   &__feedback {
     color: #de002e;
     font-weight: bold;
+    text-align: center;
   }
   &__form {
     .mat-form-field {

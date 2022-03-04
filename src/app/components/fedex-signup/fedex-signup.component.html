@@ -1,12 +1,12 @@
 <div class="fedex-signup__container">
+  <h1>{{ title }}</h1>
+  
   <div *ngIf="loading">
     <mat-spinner [diameter]="50"></mat-spinner>
   </div>
   <h3 *ngIf="!loading && feedbackMessage.length" class="fedex-signup__feedback">
     {{ feedbackMessage }}
   </h3>
-
-  <h1>{{ title }}</h1>
 
   <form
     #form="ngForm"
@@ -70,6 +70,13 @@
         required
         minlength="8"
       />
+      <!-- Confirm password field is typically used to include when creating a password. This is because a password field masks the user’s input. 
+        If users mistype their password, they won’t recognize it. The confirm password catches typos by prompting users to type their password twice.
+        While the confirm password field seems sensible, including it can lower your conversion rate. 
+        Many research studies found that the confirm password field was responsible for over a quarter of all users that abandoned their sign up form.
+        It was also responsible for hundreds of user corrections, including field refocuses and deletes.
+        
+       Hence, password field with maskingunmasking feature is preferred over confirm password-->
       <mat-icon matSuffix (click)="togglePasswordVisibility()"
         >visibility</mat-icon
       >
@@ -82,7 +89,7 @@
         >Password must be minimum 8 characters</mat-error
       >
       <mat-error
-        *ngIf="!signupForm.controls['password'].errors?.['required'] && !signupForm.controls['password'].errors?.['minlength'] 
+        *ngIf="!signupForm.controls['password'].errors?.['required']
         && signupForm.controls['password'].errors?.['lowerCaseUpperCaseLetters']"
         id="passwordWithLowerCaseUppercase"
         >Password must contain at least 1 upper case letter, 1 lower case

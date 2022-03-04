@@ -18,10 +18,20 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Technical choice
+
+Angular material:
+
+https://material.angular.io/
+
+For UI/UX, Angular material has been choosen.
+Angular Material is an implementation of Google's Material Design Specification.
+This project provides a set of reusable, well-tested, and accessible UI components like Inputs, buttons, spinners and much more. It also provides Schematics, theming and typography solutions etc.
+
+Angular Material is a User Interface (UI) component library to speed up the development of elegant and consistent and scalable user interfaces.
+
+Angular Material also provides modules for each component so our app can import only ones that we use.
