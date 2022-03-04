@@ -14,6 +14,7 @@ import { SignupService } from '@fedex/shared/services/signup.service';
 import { SignedupUserResponse } from '@fedex/shared/models/signed-up-user-response';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormControlsEnum } from '@fedex/shared/enums/form-controls';
 
 describe('FedexSignupComponent', () => {
   let component: FedexSignupComponent;
@@ -24,10 +25,10 @@ describe('FedexSignupComponent', () => {
   let inputElements: Array<DebugElement>;
 
   const formGroupValue = {
-    firstName: 'John',
-    lastName: 'Lennon',
-    email: 'john.lennon@test.com',
-    password: 'helloWorld2!@3',
+    [FormControlsEnum.FirstName]: 'John',
+    [FormControlsEnum.LastName]: 'Lennon',
+    [FormControlsEnum.Email]: 'john.lennon@test.com',
+    [FormControlsEnum.Password]: 'helloWorld2!@3',
   };
 
   const responseMock: Array<SignedupUserResponse> = [
@@ -78,10 +79,10 @@ describe('FedexSignupComponent', () => {
   it('should check form elements default values', () => {
     signUpForm = component.signupForm;
     const signupFormValues = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
+      [FormControlsEnum.FirstName]: '',
+      [FormControlsEnum.LastName]: '',
+      [FormControlsEnum.Email]: '',
+      [FormControlsEnum.Password]: '',
     };
 
     expect(signUpForm.value).toEqual(signupFormValues);
@@ -104,7 +105,7 @@ describe('FedexSignupComponent', () => {
   });
 
   it('should check if email is invalid', async () => {
-    const formControlEmail = component.signupForm.get('email');
+    const formControlEmail = component.signupForm.get(FormControlsEnum.Email);
     formControlEmail?.setValue('test$Test');
     formControlEmail?.markAsTouched();
 
@@ -112,7 +113,7 @@ describe('FedexSignupComponent', () => {
     await fixture.whenStable();
 
     expect(formControlEmail?.errors).not.toBeNull();
-    expect(formControlEmail?.errors?.['email']).toBeTruthy();
+    expect(formControlEmail?.errors?.[FormControlsEnum.Email]).toBeTruthy();
 
     const matErrorEl: HTMLElement = fixture.debugElement.query(
       By.css('#emailInvalidError')
@@ -124,7 +125,7 @@ describe('FedexSignupComponent', () => {
   describe('Password validation::', () => {
     let formControlPassword: AbstractControl | null;
     beforeEach(() => {
-      formControlPassword = component.signupForm.get('password');
+      formControlPassword = component.signupForm.get(FormControlsEnum.Password);
     });
     it('should show "minimum 8 characters" error if password is less than 8 letters', async () => {
       formControlPassword?.setValue('hello');
@@ -161,7 +162,7 @@ describe('FedexSignupComponent', () => {
     });
 
     it('should show "lower case and upper case letters" error if password does not contain them', async () => {
-      const formControlPassword = component.signupForm.get('password');
+      const formControlPassword = component.signupForm.get(FormControlsEnum.Password);
       formControlPassword?.setValue('helloworld');
       formControlPassword?.markAsTouched();
 
@@ -183,7 +184,7 @@ describe('FedexSignupComponent', () => {
     });
 
     it('should not show "lower case and upper case letters" error if password contains them', async () => {
-      const formControlPassword = component.signupForm.get('password');
+      const formControlPassword = component.signupForm.get(FormControlsEnum.Password);
       formControlPassword?.setValue('helloWORLD');
       formControlPassword?.markAsTouched();
 
@@ -201,7 +202,7 @@ describe('FedexSignupComponent', () => {
     });
 
     it('should show "first name or last name" error if password is contains them', async () => {
-      const formControlFirstName = component.signupForm.get('firstName');
+      const formControlFirstName = component.signupForm.get(FormControlsEnum.FirstName);
       formControlFirstName?.setValue('John');
       formControlFirstName?.markAsTouched();
 
@@ -224,7 +225,7 @@ describe('FedexSignupComponent', () => {
     });
 
     it('should not show "first name or last name" error if password does not contain them', async () => {
-      const formControlFirstName = component.signupForm.get('firstName');
+      const formControlFirstName = component.signupForm.get(FormControlsEnum.FirstName);
       formControlFirstName?.setValue('John');
       formControlFirstName?.markAsTouched();
 
@@ -259,7 +260,7 @@ describe('FedexSignupComponent', () => {
       });
     });
 
-    it("should reset form when all validations are fulfilled and form is submitted successfully", () => {
+    it('should reset form when all validations are fulfilled and form is submitted successfully', () => {
       signUpFormSubmitSpy = spyOn(signupService, 'signUp').and.returnValue(
         of(responseMock)
       );

@@ -18,12 +18,12 @@
       <mat-label>First Name</mat-label>
       <input
         matInput
-        name="firstName"
+        [name]="FormControlsEnum.FirstName"
         placeholder="First Name"
-        formControlName="firstName"
+        [formControlName]="FormControlsEnum.FirstName"
         required
       />
-      <mat-error *ngIf="signupForm.controls['firstName'].errors?.['required']"
+      <mat-error *ngIf="signupForm.controls[FormControlsEnum.FirstName].errors?.['required']"
         >First name is required</mat-error
       >
     </mat-form-field>
@@ -31,12 +31,12 @@
       <mat-label>Last Name</mat-label>
       <input
         matInput
-        name="lastName"
+        [name]="FormControlsEnum.LastName"
         placeholder="Last Name"
-        formControlName="lastName"
+        [formControlName]="FormControlsEnum.LastName"
         required
       />
-      <mat-error *ngIf="signupForm.controls['lastName'].errors?.['required']"
+      <mat-error *ngIf="signupForm.controls[FormControlsEnum.LastName].errors?.['required']"
         >Last name is required</mat-error
       >
     </mat-form-field>
@@ -45,16 +45,16 @@
       <input
         matInput
         type="email"
-        name="email"
+        [name]="FormControlsEnum.Email"
         placeholder="Email"
-        formControlName="email"
+        [formControlName]="FormControlsEnum.Email"
         required
       />
-      <mat-error *ngIf="signupForm.controls['email'].errors?.['required']"
+      <mat-error *ngIf="signupForm.controls[FormControlsEnum.Email].errors?.['required']"
         >Email is required</mat-error
       >
       <mat-error
-        *ngIf="signupForm.controls['email'].errors?.['email']"
+        *ngIf="signupForm.controls[FormControlsEnum.Email].errors?.['email']"
         id="emailInvalidError"
         >Email is invalid</mat-error
       >
@@ -64,9 +64,9 @@
       <input
         matInput
         [type]="showPassword ? 'text' : 'password'"
-        name="password"
+        [name]="FormControlsEnum.Password"
         placeholder="Password"
-        formControlName="password"
+        [formControlName]="FormControlsEnum.Password"
         required
         minlength="8"
       />
@@ -80,23 +80,23 @@
       <mat-icon matSuffix (click)="togglePasswordVisibility()"
         >visibility</mat-icon
       >
-      <mat-error *ngIf="signupForm.controls['password'].errors?.['required']"
+      <mat-error *ngIf="signupForm.controls[FormControlsEnum.Password].errors?.['required']"
         >Password is required</mat-error
       >
       <mat-error
-        *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['minlength']"
+        *ngIf="!signupForm.controls[FormControlsEnum.Password].errors?.['required'] && signupForm.controls[FormControlsEnum.Password].errors?.['minlength']"
         id="passwordLessThanMinimumLetters"
         >Password must be minimum 8 characters</mat-error
       >
       <mat-error
-        *ngIf="!signupForm.controls['password'].errors?.['required']
-        && signupForm.controls['password'].errors?.['lowerCaseUpperCaseLetters']"
+        *ngIf="!signupForm.controls[FormControlsEnum.Password].errors?.['required']
+        && signupForm.controls[FormControlsEnum.Password].errors?.['lowerCaseUpperCaseLetters']"
         id="passwordWithLowerCaseUppercase"
         >Password must contain at least 1 upper case letter, 1 lower case
         letter. Ex: HelloWorld</mat-error
       >
       <mat-error
-        *ngIf="!signupForm.controls['password'].errors?.['required'] && signupForm.controls['password'].errors?.['invalidPassword']"
+        *ngIf="!signupForm.controls[FormControlsEnum.Password].errors?.['required'] && signupForm.controls[FormControlsEnum.Password].errors?.['invalidPassword']"
         id="passwordWithFirstOrLastName"
         >Password must not contain first name or last name</mat-error
       >

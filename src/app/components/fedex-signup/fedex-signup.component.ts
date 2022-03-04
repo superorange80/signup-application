@@ -7,6 +7,7 @@ import {
   passwordValidator,
 } from '@fedex/shared/validators/custom-validators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormControlsEnum } from '@fedex/shared/enums/form-controls';
 
 @Component({
   selector: 'fedex-signup',
@@ -14,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./fedex-signup.component.scss'],
 })
 export class FedexSignupComponent implements OnInit, OnDestroy {
+  readonly FormControlsEnum = FormControlsEnum;
   title = 'Fedex.com Signup';
   signupForm: FormGroup;
   loading = false;
@@ -30,10 +32,10 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.signupForm = this.fb.group(
       {
-        firstName: ['', [Validators.required]],
-        lastName: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, lowerCaseUpperCaseValidator()]],
+        [FormControlsEnum.FirstName]: ['', [Validators.required]],
+        [FormControlsEnum.LastName]: ['', [Validators.required]],
+        [FormControlsEnum.Email]: ['', [Validators.required, Validators.email]],
+        [FormControlsEnum.Password]: ['', [Validators.required, lowerCaseUpperCaseValidator()]],
       },
       { validators: passwordValidator() }
     );
