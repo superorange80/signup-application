@@ -12,7 +12,7 @@ import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { SignupService } from '@fedex/shared/services/signup.service';
 import { SignedupUserResponse } from '@fedex/shared/models/signed-up-user-response';
-import { of, throwError } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControlsEnum } from '@fedex/shared/enums/form-controls';
 
@@ -321,7 +321,7 @@ describe('FedexSignupComponent', () => {
         of(responseMock)
       );
       signUpFormElement.triggerEventHandler('submit', null);
-      component.loading = true;
+      component.isLoading$ = new BehaviorSubject<boolean>(true);
       fixture.detectChanges();
       await fixture.whenStable();
 
@@ -336,7 +336,7 @@ describe('FedexSignupComponent', () => {
         of(responseMock)
       );
       signUpFormElement.triggerEventHandler('submit', null);
-      component.loading = false;
+      component.isLoading$ = new BehaviorSubject<boolean>(false);
       fixture.detectChanges();
       await fixture.whenStable();
 

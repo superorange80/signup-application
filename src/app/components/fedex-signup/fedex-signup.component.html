@@ -1,11 +1,11 @@
 <div class="fedex-signup__container">
   <h1>{{ title }}</h1>
   
-  <div *ngIf="loading">
+  <div *ngIf="isLoading$ | async">
     <mat-spinner [diameter]="50"></mat-spinner>
   </div>
-  <h3 *ngIf="!loading && feedbackMessage.length" class="fedex-signup__feedback">
-    {{ feedbackMessage }}
+  <h3 *ngIf="(isLoading$ | async) === false && (feedbackMessage$ | async)?.length" class="fedex-signup__feedback">
+    {{ feedbackMessage$ | async }}
   </h3>
 
   <form
@@ -103,7 +103,7 @@
     </mat-form-field>
     <div>
       <button
-        [disabled]="loading"
+        [disabled]="isLoading$ | async"
         mat-raised-button
         color="primary"
         type="submit"

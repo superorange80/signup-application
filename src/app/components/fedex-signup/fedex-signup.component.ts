@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { finalize, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, finalize, Subject, takeUntil } from 'rxjs';
 import { SignupService } from '@fedex/shared/services/signup.service';
 import {
   lowerCaseUpperCaseValidator,
@@ -18,9 +18,10 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
   readonly FormControlsEnum = FormControlsEnum;
   title = 'Fedex.com Signup';
   signupForm: FormGroup;
-  loading = false;
-  feedbackMessage = '';
   showPassword = false;
+
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  feedbackMessage$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   @ViewChild('form') form:any;
   private destroy$: Subject<boolean> = new Subject<boolean>();
@@ -50,22 +51,22 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.signupForm.valid) {
-      this.loading = true;
+      this.isLoading$.next(true)
 
       this.signUpService
         .signUp(this.signupForm.value)
         .pipe(
           takeUntil(this.destroy$),
-          finalize(() => (this.loading = false))
+          finalize(() => (this.isLoading$.next(false)))
         )
         .subscribe({
           next: (_signedUserResource: any) => {
-            this.feedbackMessage = 'Signup is successfull';
+            this.feedbackMessage$.next('Signup is successfull');
             this.form.resetForm();
           },
           error: (errorResponse: HttpErrorResponse) => {
-            this.loading = false;
-            this.feedbackMessage = errorResponse.error.message;
+            this.isLoading$.next(false);
+            this.feedbackMessage$.next(errorResponse.error.message);
           },
         });
     }
