@@ -18,20 +18,20 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
   readonly FormControlsEnum = FormControlsEnum;
   title = 'Fedex.com Signup';
   signupForm: FormGroup;
-  showPassword = false;
 
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   feedbackMessage$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  showPassword$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  @ViewChild('form') form:any;
+  @ViewChild('signUpformReference') signUpformReference:any;
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private fb: FormBuilder, private signUpService: SignupService) {
+  constructor(private formBuilder: FormBuilder, private signUpService: SignupService) {
     this.signupForm = new FormGroup({});
   }
 
   ngOnInit() {
-    this.signupForm = this.fb.group(
+    this.signupForm = this.formBuilder.group(
       {
         [FormControlsEnum.FirstName]: ['', [Validators.required]],
         [FormControlsEnum.LastName]: ['', [Validators.required]],
@@ -43,7 +43,8 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
   }
 
   togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
+    const passwordVisibility = this.showPassword$.getValue();
+    this.showPassword$.next(!passwordVisibility);
   }
 
   signup(): void {
@@ -62,7 +63,7 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (_signedUserResource: any) => {
             this.feedbackMessage$.next('Signup is successfull');
-            this.form.resetForm();
+            this.signUpformReference.resetForm();
           },
           error: (errorResponse: HttpErrorResponse) => {
             this.isLoading$.next(false);

@@ -9,7 +9,7 @@
   </h3>
 
   <form
-    #form="ngForm"
+    #signUpformReference="ngForm"
     [formGroup]="signupForm"
     (ngSubmit)="signup()"
     class="fedex-signup__form"
@@ -63,7 +63,7 @@
       <mat-label>Password</mat-label>
       <input
         matInput
-        [type]="showPassword ? 'text' : 'password'"
+        [type]="(showPassword$ | async) ? 'text' : 'password'"
         [name]="FormControlsEnum.Password"
         placeholder="Password"
         [formControlName]="FormControlsEnum.Password"
