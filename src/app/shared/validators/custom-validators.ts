@@ -1,12 +1,11 @@
 import {
   AbstractControl,
-  FormGroup,
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
 
-export function passwordValidator() {
-  return (form: FormGroup): ValidationErrors | null => {
+export function passwordValidator(): ValidatorFn {
+  return (form: AbstractControl): ValidationErrors | null => {
     const firstName = form.get('firstName')?.value?.toLowerCase();
     const lastName = form.get('lastName')?.value?.toLowerCase();
     const password = form.get('password')?.value?.toLowerCase();
@@ -16,11 +15,14 @@ export function passwordValidator() {
       (lastName !== '' && password?.includes(lastName));
 
     if (isInvalidPassword) {
-      form.get('password')?.setErrors({ invalidPassword: { value: password } });
-      return { invalidPassword: { value: password } };
+      form.get('password')?.setErrors({ invalidPassword: true });
+      return { invalidPassword: true };
+    } else {
+      if(form.get('password')?.errors?.['invalidPassword']) {
+        form.get('password')?.setErrors(null);
+      }
+      return null;
     }
-
-    return null;
   };
 }
 

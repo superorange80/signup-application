@@ -33,8 +33,8 @@ describe('SignupService', () => {
       imports: [HttpClientTestingModule],
     });
 
-    service = TestBed.get(SignupService);
-    httpMock = TestBed.get(HttpTestingController);
+    service = TestBed.inject(SignupService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should be able to post signup form data to the api', () => {
@@ -47,12 +47,12 @@ describe('SignupService', () => {
   });
 
   it('should return custom error message when error is thrown by the api', () => {
-    service.signUp(requestPayloadMock).subscribe(
-      (data) => fail('Should have failed with 404 error'),
-      (error: HttpErrorResponse) => {
+    service.signUp(requestPayloadMock).subscribe({
+      next: (data) => fail('Should have failed with 404 error'),
+      error: (error: HttpErrorResponse) => {
         expect(error.message).toEqual('Something bad happened. please try again later.');
       }
-    );
+    });
     httpMock.expectOne(environment.apiUrl).flush(null, {status: 400, statusText: "Bad Request"});
   });
 });
