@@ -63,6 +63,9 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (_signedUserResource: any) => {
             this.feedbackMessage$.next('Signup is successfull');
+            // By default, Angular/Material watch formControl's error state not only by touched but also submitted status of the form
+            // For reason above, you also need to reset the form to unsubmitted status.
+            // calling resetForm of FormGroupDirective(getting instance by ViewChild), it will reset both the form data and submit status.
             this.signUpformReference.resetForm();
           },
           error: (errorResponse: HttpErrorResponse) => {
