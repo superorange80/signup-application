@@ -42,10 +42,12 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
     );
   }
 
-  // XXX: It is not recommended to databind functions since they are called during every change detection cycle.
-  // Since a getter is a function, I was hesitant that it will have a performance impact.
-  // However, the performance difference here is nothing as this getter is just returning form controls
-  // This should improve readability in the template and reduce object property look up multiple times
+  /**
+  * XXX: It is not recommended to databind functions since they are called during every change detection cycle.
+  * Since a getter is a function, I was hesitant that it will have a performance impact.
+  * However, the performance difference here is nothing as this getter is just returning form controls
+  * This improves readability in the template and reduce object property look up multiple times
+  */
 
   // getter for easy access to form fields
   get signupFormControls() {
@@ -73,9 +75,11 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (_signedUserResource: any) => {
             this.feedbackMessage$.next('Signup is successfull');
-            // By default, Angular/Material watch formControl's error state not only by touched but also submitted status of the form
-            // For reason above, you also need to reset the form to unsubmitted status.
-            // calling resetForm of FormGroupDirective(getting instance by ViewChild), it will reset both the form data and submit status.
+            /**
+            * By default, Angular/Material watch formControl's error state not only by touched but also submitted status of the form
+            * For reason above, you also need to reset the form to unsubmitted status.
+            * calling resetForm of FormGroupDirective(getting instance by ViewChild), it will reset both the form data and submit status.
+            */
             this.signUpformReference.resetForm();
           },
           error: (errorResponse: HttpErrorResponse) => {
