@@ -42,6 +42,16 @@ export class FedexSignupComponent implements OnInit, OnDestroy {
     );
   }
 
+  // XXX: It is not recommended to databind functions since they are called during every change detection cycle.
+  // Since a getter is a function, I was hesitant that it will have a performance impact.
+  // However, the performance difference here is nothing as this getter is just returning form controls
+  // This should improve readability in the template and reduce object property look up multiple times
+
+  // getter for easy access to form fields
+  get signupFormControls() {
+    return this.signupForm.controls;
+  }
+
   togglePasswordVisibility(): void {
     const passwordVisibility = this.showPassword$.getValue();
     this.showPassword$.next(!passwordVisibility);
